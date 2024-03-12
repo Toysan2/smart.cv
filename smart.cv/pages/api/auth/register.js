@@ -42,7 +42,7 @@ const registerHandler = async (req, res) => {
     await user.save();
 
     // Wygenerowanie i wysłanie e-maila weryfikacyjnego
-    const verificationLink = `http://your-domain.com/verify-email?token=UNIQUE_TOKEN`;
+    const verificationLink = `https://smart-cv-vercel.vercel.app/verify-email?token=UNIQUE_TOKEN`;
     sendVerificationEmail(email, verificationLink);
 
     res.status(201).json({
