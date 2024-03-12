@@ -3,8 +3,8 @@ import User from "../../../model/user";
 import bcrypt from "bcryptjs";
 import Joi from "joi";
 import { sendVerificationEmail } from "../../../utils/nodemailer";
+import crypto from "crypto";
 
-// Nawiązanie połączenia z bazą danych przed obsługą żądań
 dbConnect();
 
 const registerHandler = async (req, res) => {
@@ -19,13 +19,11 @@ const registerHandler = async (req, res) => {
   });
 
   const { error, value } = schema.validate(req.body);
-
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
 
   const { name, email, password } = value;
-
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -33,16 +31,19 @@ const registerHandler = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
     const user = new User({
       name,
       email,
       password: hashedPassword,
+      verificationToken,
+      verified: false,
     });
 
     await user.save();
 
-    // Wygenerowanie i wysłanie e-maila weryfikacyjnego
-    const verificationLink = `https://smart-cv-vercel.vercel.app/verify-email?token=UNIQUE_TOKEN`;
+    const verificationLink = `https://smart-cv-vercel.vercel.app/verify-email?token=${verificationToken}`;
     sendVerificationEmail(email, verificationLink);
 
     res.status(201).json({

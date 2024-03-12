@@ -14,6 +14,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide a password"],
   },
+  verificationToken: String, // for email verification
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   // Add any additional fields as needed
 });
 
