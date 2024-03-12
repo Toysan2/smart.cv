@@ -1,18 +1,15 @@
 import mongoose from "mongoose";
 
-const connection = {}; // Ten obiekt przechowuje stan połączenia w trakcie życia aplikacji
+const connection = {}; // This object holds the connection state throughout the life of the application
 
 async function dbConnect() {
-  // Jeśli już istnieje połączenie, użyj go
+  // If a connection already exists, use it
   if (connection.isConnected) {
     return;
   }
 
-  // Użyj zmiennej środowiskowej do przechowywania URL do MongoDB
-  const db = await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  // Use the environment variable to store the MongoDB URL
+  const db = await mongoose.connect(process.env.MONGODB_URI);
 
   connection.isConnected = db.connections[0].readyState;
 }
