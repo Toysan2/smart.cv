@@ -5,7 +5,6 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Assuming you store the user's logged-in state in localStorage
     const loggedIn = localStorage.getItem("isLoggedIn");
     setIsLoggedIn(!!loggedIn);
   }, []);
@@ -13,8 +12,10 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link href="/" passHref>
-          <a className="navbar-brand">Smart.CV</a>
+        <Link href="/">
+          <span className="navbar-brand" style={{ cursor: "pointer" }}>
+            Smart.CV
+          </span>
         </Link>
         <button
           className="navbar-toggler"
@@ -32,30 +33,33 @@ const Navbar = () => {
             {!isLoggedIn && (
               <>
                 <li className="nav-item">
-                  <Link href="/login" passHref>
-                    <a className="nav-link">Login</a>
+                  <Link href="/login">
+                    <span className="nav-link" style={{ cursor: "pointer" }}>
+                      Login
+                    </span>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/register" passHref>
-                    <a className="nav-link">Register</a>
+                  <Link href="/register">
+                    <span className="nav-link" style={{ cursor: "pointer" }}>
+                      Register
+                    </span>
                   </Link>
                 </li>
               </>
             )}
             {isLoggedIn && (
               <li className="nav-item">
-                <a
+                <span
                   className="nav-link"
-                  href="#"
+                  style={{ cursor: "pointer" }}
                   onClick={() => {
                     localStorage.removeItem("isLoggedIn");
                     setIsLoggedIn(false);
-                    // Redirect to home or login page
                   }}
                 >
                   Logout
-                </a>
+                </span>
               </li>
             )}
           </ul>
