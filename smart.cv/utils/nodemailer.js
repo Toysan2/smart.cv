@@ -1,25 +1,23 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "in-v3.mailjet.com", // Mailjet SMTP server
-  port: 465, // Secure SMTP port
-  secure: true, // Use TLS
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: process.env.SMTP_SECURE,
   auth: {
-    user: process.env.MAILJET_API_KEY, // Your Mailjet API Key
-    pass: process.env.MAILJET_API_SECRET, // Your Mailjet API Secret
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
 export const sendVerificationEmail = async (email, link) => {
-  // Email options
   const mailOptions = {
-    from: '"Smart CV" <smart.cv@mail.ee>', // sender address
-    to: email, // list of receivers
-    subject: "Verify your email address", // Subject line
-    html: `<p>Please click on the link to verify your email: <a href="${link}">${link}</a></p>`, // html body
+    from: `"Smart CV" <${process.env.EMAIL_ADDRESS}>`,
+    to: email,
+    subject: "Verify your email address",
+    html: `<p>Please click on the link to verify your email: <a href="${link}">${link}</a></p>`,
   };
 
-  // Send email
   try {
     const result = await transporter.sendMail(mailOptions);
     console.log("Email sent successfully", result);

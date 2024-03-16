@@ -1,8 +1,8 @@
-import dbConnect from "../../../utils/dbConnect";
-import User from "../../../model/user";
+import dbConnect from "@/utils/dbConnect";
+import User from "@/model/user";
 import bcrypt from "bcryptjs";
 import Joi from "joi";
-import { sendVerificationEmail } from "../../../utils/nodemailer";
+import { sendVerificationEmail } from "@/utils/nodemailer";
 import crypto from "crypto";
 
 dbConnect();

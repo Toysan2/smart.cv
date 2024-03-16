@@ -15,6 +15,7 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "joi": "^17.12.2",
+    "jsonwebtoken": "^9.0.2",
     "mailgun-js": "^0.22.0",
     "mongoose": "^8.2.1",
     "next": "14.1.3",

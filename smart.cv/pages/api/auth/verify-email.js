@@ -1,5 +1,5 @@
-import dbConnect from "../../../utils/dbConnect";
-import User from "../../../model/user";
+import dbConnect from "@/utils/dbConnect";
+import User from "@/model/user";
 
 export default async function verifyEmail(req, res) {
   await dbConnect();
