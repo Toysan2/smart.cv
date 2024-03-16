@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Register() {
   const {
@@ -6,73 +8,42 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async (data) => {
     const { name, email, password } = data;
-    // Logika wysyłania danych do API, np. za pomocą fetch API
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
 
-    const responseData = await response.json();
-    if (response.ok) {
-      // Przekieruj lub wyświetl komunikat o sukcesie
-      console.log("Registration successful", responseData.message);
-    } else {
-      // Wyświetl komunikat o błędzie
-      console.error("Registration failed", responseData.error);
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const responseData = await response.json();
+      alert(responseData.message); // Pokaż sukces poprzez alert, ale możesz to zastąpić bardziej zaawansowaną logiką interfejsu użytkownika.
+      router.push("/login"); // Przekieruj do logowania po pomyślnej rejestracji.
+    } catch (error) {
+      console.error("Registration failed", error);
+      setErrorMessage(error.message || "An unexpected error occurred");
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          type="text"
-          {...register("name", { required: "Name is required" })}
-        />
-        {errors.name && <p>{errors.name.message}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          {...register("email", {
-            required: "Email is required",
-            pattern: /^\S+@\S+$/i,
-          })}
-        />
-        {errors.email && <p>{errors.email.message}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
-            },
-          })}
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-      </div>
-
+      {/* Fields */}
+      {errorMessage && <p>{errorMessage}</p>}
       <button type="submit">Register</button>
     </form>
   );
