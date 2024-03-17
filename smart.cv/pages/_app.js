@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Provider } from "react-redux";
 import { useStore } from "@/store/store";
@@ -8,6 +9,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
+      <SpeedInsights />
       <Navbar />
       <Component {...pageProps} />
     </Provider>
